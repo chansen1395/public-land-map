@@ -1,0 +1,25 @@
+# =============================================================================
+# Martin Tile Server Configuration
+# Serves vector tiles from both MBTiles files and live PostGIS tables
+# =============================================================================
+
+listen_addresses: '0.0.0.0:3000'
+
+# ---------------------------------------------------------------------------
+# Serve pre-generated MBTiles files from /tiles directory
+# Martin auto-discovers .mbtiles files in the listed paths
+# ---------------------------------------------------------------------------
+mbtiles:
+  paths:
+    - /tiles
+
+# ---------------------------------------------------------------------------
+# Serve vector tiles directly from PostGIS tables
+# auto_publish discovers all spatial tables in the public schema
+# ---------------------------------------------------------------------------
+postgres:
+  # Provided by docker-compose.yml from PG_USER, PG_PASSWORD and PG_DB in backend/.env
+  connection_string: ${DATABASE_URL}
+  auto_publish:
+    tables:
+      from: public

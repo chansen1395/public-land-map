@@ -1,0 +1,21 @@
+# Local settings (copy .env.example to .env)
+.env
+
+# Raw data downloads and loader caches (multi-GB)
+data/*
+!data/.gitkeep
+
+# Generated MBTiles and offline bundles
+tiles/*
+!tiles/.gitkeep
+!tiles/offline/
+tiles/offline/*
+!tiles/offline/.gitkeep
+
+# API server build output
+api-server/build/
+api-server/.gradle/
+api-server/.kotlin/
+
+# Docker bind-mount data, if used
+pgdata/

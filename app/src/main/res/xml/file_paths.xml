@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-files-path
+        name="gpx_exports"
+        path="Documents/gpx_exports/" />
+    <files-path
+        name="internal_gpx"
+        path="gpx_exports/" />
+</paths>

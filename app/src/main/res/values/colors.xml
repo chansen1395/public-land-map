@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Public Land Colors -->
+    <color name="usfs_green">#228B22</color>
+    <color name="blm_gold">#DAA520</color>
+    <color name="nps_dark_green">#006400</color>
+    <color name="usfws_teal">#008B8B</color>
+    <color name="state_forest_light_green">#90EE90</color>
+    <color name="state_parks_blue">#4169E1</color>
+    <color name="state_wildlife_orange">#FF8C00</color>
+    <color name="wilderness_purple">#8B008B</color>
+    <color name="county_city_light_blue">#87CEEB</color>
+    <color name="tribal_brown">#8B4513</color>
+    <color name="military_red">#DC143C</color>
+
+    <!-- App Theme Colors -->
+    <color name="primary">#2E7D32</color>
+    <color name="primary_dark">#1B5E20</color>
+    <color name="primary_light">#4CAF50</color>
+    <color name="secondary">#795548</color>
+    <color name="secondary_dark">#4E342E</color>
+    <color name="background_light">#FAFAFA</color>
+    <color name="background_dark">#121212</color>
+    <color name="surface_light">#FFFFFF</color>
+    <color name="surface_dark">#1E1E1E</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="on_secondary">#FFFFFF</color>
+    <color name="on_background_light">#1C1B1F</color>
+    <color name="on_background_dark">#E6E1E5</color>
+    <color name="error">#B3261E</color>
+</resources>

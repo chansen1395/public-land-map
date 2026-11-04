@@ -1,0 +1,67 @@
+# All ports are published on the loopback interface only. The Android emulator reaches them
+# through 10.0.2.2, and a phone through "adb reverse"; nothing is reachable from the network.
+services:
+  postgis:
+    image: postgis/postgis:16-3.4
+    container_name: plm-postgis
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_DB: ${PG_DB:-publiclandmap}
+      POSTGRES_USER: ${PG_USER:-publiclandmap}
+      POSTGRES_PASSWORD: ${PG_PASSWORD:?Set PG_PASSWORD in backend/.env (copy .env.example)}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+  martin:
+    image: ghcr.io/maplibre/martin:v0.13.0
+    container_name: plm-martin
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - ./tiles:/tiles
+      - ./martin:/config
+    command: --config /config/config.yaml
+    environment:
+      DATABASE_URL: postgresql://${PG_USER:-publiclandmap}:${PG_PASSWORD:?Set PG_PASSWORD in backend/.env (copy .env.example)}@postgis:5432/${PG_DB:-publiclandmap}
+    depends_on:
+      postgis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  api-server:
+    build:
+      context: ./api-server
+      dockerfile: Dockerfile
+    container_name: plm-api
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgis:5432/${PG_DB:-publiclandmap}
+      DB_USER: ${PG_USER:-publiclandmap}
+      DB_PASSWORD: ${PG_PASSWORD:?Set PG_PASSWORD in backend/.env (copy .env.example)}
+      OFFLINE_TILES_DIR: /tiles/offline
+    volumes:
+      - ./tiles/offline:/tiles/offline:ro
+    depends_on:
+      postgis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+    driver: local
